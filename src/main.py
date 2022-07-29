@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 from DataBaseConnect import pushToAtlas
 from NotesParse import parseNotes
 
-
 def decodeStr(s):
     try:
         subject = email.header.decode_header(s)
@@ -48,7 +47,7 @@ def getCMDArgs(argv):
             print('Usage: python3 main.py -u <username> -p <password> -s <server> -a <atlasuri>')
             sys.exit(0)
 
-def parseContent():
+def parseContent(cnt):
     server = argdict['server']
     port = 993
     M = imaplib.IMAP4_SSL(server, port)
@@ -56,7 +55,7 @@ def parseContent():
     password = argdict['password']
     M.login(username,password)
     M.select()
-    typ, data = M.search(None, 'ALL')
+    typ, data = M.search(None, 'UNSEEN')
     for num in data[0].split():
         typ, data = M.fetch(num, '(RFC822)')
         msg = parser.BytesParser().parsebytes(data[0][1])
@@ -68,11 +67,14 @@ def parseContent():
                 BooksNote = part.get_payload(decode=True).decode('utf-8')
                 notesList = parseNotes(BooksNote)
                 pushToAtlas(notesList,argdict['atlasuri'])
-        num = num.decode('utf-8')
-        print(num, sub) 
+        cnt += 1
+        print("获取图书" + str(cnt) + sub)
+        M.store(num, '+FLAGS', '\\Seen')
     M.close()
     M.logout()
+    return cnt
 
 if "__main__" == __name__:
+    cnt = 0
     getCMDArgs(sys.argv[1:])
-    parseContent()
+    parseContent(cnt)
