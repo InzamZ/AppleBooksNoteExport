@@ -29,4 +29,4 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with flake8
       run: 
-        python src/main.py -u ${{ serects.EMAILACCOUNT }} -p ${{ serects.EMAILPASSWORD }} -s ${{ serects.EMAILSERVER}} -a ${{ serects.ATLASURI}}
+        python src/main.py -u ${{ secrets.EMAILACCOUNT }} -p ${{ secrets.EMAILPASSWORD }} -s ${{ secrets.EMAILSERVER}} -a ${{ secrets.ATLASURI}}
