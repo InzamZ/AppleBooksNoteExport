@@ -4,7 +4,7 @@ import email
 from email import parser,header
 import sys
 from bs4 import BeautifulSoup
-from DataBaseConnect import pushToAtlas
+from DataBaseConnect import pushToAtlas, pushToAtlasMyFavorite
 from NotesParse import parseNotes
 
 def decodeStr(s):
@@ -65,9 +65,9 @@ def parseContent(cnt):
         for part in msg.walk():
             if (part.get_content_type() == 'text/html'):
                 BooksNote = part.get_payload(decode=True).decode('utf-8')
-                open('BooksNote.html','w').write(BooksNote)
-                notesList = parseNotes(BooksNote)
+                notesList, favoriteNotes = parseNotes(BooksNote)
                 pushToAtlas(notesList,argdict['atlasuri'])
+                pushToAtlasMyFavorite(favoriteNotes,argdict['atlasuri'])
         cnt += 1
         print("获取图书" + str(cnt) + sub)
         M.store(num, '+FLAGS', '\\Seen')
