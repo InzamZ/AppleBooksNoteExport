@@ -1,0 +1,7 @@
+autopep8==1.6.0
+beautifulsoup4==4.11.1
+dnspython==2.2.1
+pycodestyle==2.8.0
+pymongo==4.2.0
+soupsieve==2.3.2.post1
+toml==0.10.2
