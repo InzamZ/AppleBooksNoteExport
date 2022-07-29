@@ -9,7 +9,7 @@ Apple Books 在中国市场虽然没有办法使用，但是作为（iPad、iPho
 接收邮件的程序需要提供邮箱账号，邮箱口令，邮件 `IMAP` 服务器，以及 `Atlas` 的连接链接。目前只支持储存到 `Atlas` 的 `MongoDB` 中，可以自行重写 `DataBaseConnect.py` 实现不同数据库的储存。
 
 ```bash
-python main.py -u <username> -p <password> -s <server> -a <atlasuri>
+python main.py -u <EMAILACCOUNT> -p <EMAILPASSWORD> -s <EMAILSERVER> -a <ATLASURI>
 ```
 
 不需要储存到数据库可以使用解析后返回的数组，以 `python Dictionary` 形式储存，目前解析完成后的格式为：
