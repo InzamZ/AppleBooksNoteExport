@@ -23,6 +23,6 @@ def parseNotes(html):
     return notesList
 
 if "__main__" == __name__:
-    f = open('BooksNote.html', 'r')
+    f = open('../test/BooksNote.html', 'r')
     notesList = parseNotes(f.read())
     print(notesList)
