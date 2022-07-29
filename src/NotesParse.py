@@ -36,11 +36,14 @@ def parseNotes(html):
         if (item["content"].strip() == ""):
             continue
         item = parseNoteArgs(item)
+        pattern = '^[^\u4e00-\u9fa5A-Za-z]+'
+        res = re.match(pattern, item["chapter"])
+        if res:
+            item["chapter"] = item["chapter"][len(res.group(0)):]
         if item["type"] == 0:
             favoriteNotes.append(item)
         notesList.append(item)
     return notesList, favoriteNotes
-
 
 def parseNoteArgs(item):
     comment = item["note"]
