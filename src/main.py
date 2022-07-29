@@ -69,7 +69,7 @@ def parseContent(cnt):
                 pushToAtlas(notesList,argdict['atlasuri'])
                 pushToAtlasMyFavorite(favoriteNotes,argdict['atlasuri'])
         cnt += 1
-        print("获取图书" + str(cnt) + sub)
+        print("获取图书 " + str(cnt) + sub)
         M.store(num, '+FLAGS', '\\Seen')
     M.close()
     M.logout()
