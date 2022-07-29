@@ -30,11 +30,11 @@ def getCMDArgs(argv):
     try:
         opts, args = getopt.getopt(argv,"hu:p:s:a:",["username=","password=","server=","atlasuri="])
     except getopt.GetoptError:
-        print('Usage: python3 MailClient.py -u <username> -p <password> -s <server> -a <atlasuri>')
+        print('Usage: python3 main.py -u <username> -p <password> -s <server> -a <atlasuri>')
         sys.exit(2)
     for opt, arg in opts:
         if opt in ('-h', '--help'):
-            print('Usage: python3 MailClient.py -u <username> -p <password> -s <server>')
+            print('Usage: python3 main.py -u <username> -p <password> -s <server>')
             sys.exit(0)
         elif opt in ('-u', '--username'):
             argdict['username'] = arg
@@ -45,7 +45,7 @@ def getCMDArgs(argv):
         elif opt in ('-a', '--atlasuri'):
             argdict['atlasuri'] = arg
         else:
-            print('Usage: python3 MailClient.py -u <username> -p <password> -s <server> -a <atlasuri>')
+            print('Usage: python3 main.py -u <username> -p <password> -s <server> -a <atlasuri>')
             sys.exit(0)
 
 def parseContent():
