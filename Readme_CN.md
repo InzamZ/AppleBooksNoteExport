@@ -24,8 +24,8 @@ python main.py -u <username> -p <password> -s <server> -a <atlasuri>
 
 ## 下一步
 
-- [ ] 按照选中内容进行Hash并且索引，相同内容进行更新
+- [x] 按照选中内容进行Hash并且索引，相同内容进行更新
 - [ ] 在笔记中添加特殊标识字段，例如`[[speaker]]`来解析选中文本的讲话人
-- [ ] `type`字段的完善
+- [x] `type`字段的完善
 - [ ] `Readme.md` in English
 - [ ] `CI`相关

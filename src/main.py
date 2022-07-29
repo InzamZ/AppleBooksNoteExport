@@ -1,5 +1,5 @@
 import getopt
-import getpass, imaplib
+import imaplib
 import email
 from email import parser,header
 import sys
@@ -65,6 +65,7 @@ def parseContent(cnt):
         for part in msg.walk():
             if (part.get_content_type() == 'text/html'):
                 BooksNote = part.get_payload(decode=True).decode('utf-8')
+                open('BooksNote.html','w').write(BooksNote)
                 notesList = parseNotes(BooksNote)
                 pushToAtlas(notesList,argdict['atlasuri'])
         cnt += 1
