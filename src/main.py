@@ -2,6 +2,7 @@ import email
 import getopt
 import imaplib
 import sys
+import argparse
 from email import parser, header
 
 from DataBaseConnect import push_to_atlas, push_to_atlas_my_favorite
@@ -22,47 +23,29 @@ def decode_str(s):
     return subject
 
 
-arg_dict = {}
+def parse_cmd_args(argv):
+    args_parser = argparse.ArgumentParser(description='Parse Apple Books Notes')
+    args_parser.add_argument('-s', '--server', help='IMAP server', required=True)
+    args_parser.add_argument('-u', '--username', help='IMAP username', required=True)
+    args_parser.add_argument('-p', '--password', help='IMAP password', required=True)
+    args_parser.add_argument('-a', '--atlas_uri', help='Atlas URI', required=True)
+    args_parser.add_argument('-v', '--ios_version', help='IOS Version', required=True)
+    return args_parser.parse_args(argv)
 
 
-def get_cmd_args(argv):
-    try:
-        opts, args = getopt.getopt(argv, "hu:p:s:a:", ["username=", "password=", "server=", "atlas_uri="])
-    except getopt.GetoptError:
-        print('Usage: python3 main.py -u <username> -p <password> -s <server> -a <atlas_uri>')
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            print('Usage: python3 main.py -u <username> -p <password> -s <server>')
-            sys.exit(0)
-        elif opt in ('-u', '--username'):
-            arg_dict['username'] = arg
-        elif opt in ('-p', '--password'):
-            arg_dict['password'] = arg
-        elif opt in ('-s', '--server'):
-            arg_dict['server'] = arg
-        elif opt in ('-a', '--atlas_uri'):
-            arg_dict['atlas_uri'] = arg
-        else:
-            print('Usage: python3 main.py -u <username> -p <password> -s <server> -a <atlas_uri>')
-            sys.exit(0)
-
-
-# noinspection PyUnresolvedReferences
-def parse_content():
+def parse_content(args):
+    server = args.server
+    username = args.username
+    password = args.password
+    atlas_uri = args.atlas_uri
     res = 0
-    server = arg_dict['server']
     port = 993
     m = imaplib.IMAP4_SSL(server, port)
-    username = arg_dict['username']
-    password = arg_dict['password']
     m.login(username, password)
     m.select()
     typ, data = m.search(None, 'UNSEEN')
-    # noinspection PyUnresolvedReferences
     for num in data[0].split():
         typ, data = m.fetch(num, '(RFC822)')
-        # noinspection PyUnresolvedReferences
         msg = parser.BytesParser().parsebytes(data[0][1])
         sub = decode_str(msg['Subject']).strip()
         if sub.find('的笔记') == -1:
@@ -71,8 +54,8 @@ def parse_content():
             if part.get_content_type() == 'text/html':
                 books_note = part.get_payload(decode=True).decode('utf-8')
                 notes_list, favorite_notes = parse_notes(books_note)
-                push_to_atlas(notes_list, arg_dict['atlas_uri'])
-                push_to_atlas_my_favorite(favorite_notes, arg_dict['atlas_uri'])
+                push_to_atlas(notes_list, atlas_uri)
+                push_to_atlas_my_favorite(favorite_notes, atlas_uri)
         res += 1
         print("获取图书" + str(res) + " " + sub)
         m.store(num, '+FLAGS', '\\Seen')
@@ -81,6 +64,10 @@ def parse_content():
     return res
 
 
+def main():
+    args = parse_cmd_args(sys.argv[1:])
+    parse_content(args)
+
+
 if "__main__" == __name__:
-    get_cmd_args(sys.argv[1:])
-    cnt = parse_content()
+    main()
